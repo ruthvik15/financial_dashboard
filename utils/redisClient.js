@@ -1,23 +1,22 @@
 const Redis = require("ioredis");
 
-const client = new Redis(process.env.REDIS_URL || "redis://localhost:6379", {
-    lazyConnect: true,
-    enableOfflineQueue: false,
+const client = new Redis(process.env.REDIS_URL, {
+    enableOfflineQueue: true, 
+    
     retryStrategy: (times) => {
-        // Stop retrying after 3 attempts — don't crash the app if Redis is down
-        if (times > 3) return null;
-        return Math.min(times * 200, 1000);
+        if (times > 10) {
+            console.error("[Redis] Reconnection attempts exceeded (10 max).");
+            return null; 
+        }
+        return times * 100; 
     },
 });
 
-client.on("connect", () => console.log("[Redis] Connected"));
-client.on("error", (err) => console.error("[Redis] Error:", err.message));
+client.on("connect", () => console.log("Redis Connected to Cloud"));
+client.on("error", (err) => console.error("Redis Error:", err.message));
 
 const DASHBOARD_KEY = "dashboard:analytics";
 
-/**
- * Get cached value for a key. Returns null if not found or Redis is down.
- */
 const getCache = async (key) => {
     try {
         const data = await client.get(key);
@@ -28,20 +27,14 @@ const getCache = async (key) => {
     }
 };
 
-/**
- * Store a value in cache with no TTL (lives until explicitly invalidated).
- */
 const setCache = async (key, value) => {
     try {
-        await client.set(key, JSON.stringify(value));
+        await client.set(key, JSON.stringify(value), "EX", 3600);
     } catch (err) {
         console.error("[Redis] setCache failed:", err.message);
     }
 };
 
-/**
- * Invalidate (delete) a cache key.
- */
 const invalidateCache = async (key) => {
     try {
         await client.del(key);

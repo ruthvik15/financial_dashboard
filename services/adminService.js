@@ -35,12 +35,12 @@ const deleteUser = async (id) => {
     }
 };
 
-const getRecords = async (page, limit) => {
+const getRecords = async (page, limit, filters = {}) => {
     try {
         const offset = (page - 1) * limit;
         const [rows, total] = await Promise.all([
-            recordRepository.getRecords(offset, limit),
-            recordRepository.getTotalCount(),
+            recordRepository.getRecords(offset, limit, filters),
+            recordRepository.getTotalCount(filters),
         ]);
         return { records: rows, total, page, limit };
     } catch (error) {

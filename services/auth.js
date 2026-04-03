@@ -15,12 +15,12 @@ const login = async (email, password) => {
 
 
     if (!user) {
-        throw new Error("User not found");
+        throw Object.assign(new Error("User not found"), { statusCode: 404 });
     }
 
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
-        throw new Error("Invalid credentials");
+        throw Object.assign(new Error("Invalid credentials"), { statusCode: 401 });
     }
     const token = generateToken({ id: user.id, role: user.role });
     return {

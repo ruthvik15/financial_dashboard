@@ -11,3 +11,8 @@ CREATE TABLE records (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX idx_records_date ON records(date);
+CREATE INDEX idx_records_category ON records(category);
+CREATE INDEX idx_records_type ON records(type);
+
+CREATE INDEX idx_records_deleted_date_id ON records(is_deleted, date DESC, id DESC);
