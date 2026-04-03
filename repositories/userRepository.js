@@ -46,6 +46,7 @@ const updateUser = async (id, role) => {
             `UPDATE users SET role = $1, updated_at = NOW() WHERE id = $2 AND is_deleted = FALSE RETURNING *`,
             [role, id]
         );
+        if (result.rows.length === 0) throw Object.assign(new Error("User not found"), { statusCode: 404 });
         return result.rows[0];
     } catch (error) {
         throw error;
@@ -58,6 +59,7 @@ const deActivateUser = async (id) => {
             `UPDATE users SET is_active = FALSE, updated_at = NOW() WHERE id = $1 AND is_deleted = FALSE RETURNING *`,
             [id]
         );
+        if (result.rows.length === 0) throw Object.assign(new Error("User not found"), { statusCode: 404 });
         return result.rows[0];
     } catch (error) {
         throw error;
@@ -70,6 +72,7 @@ const deleteUser = async (id) => {
             `UPDATE users SET is_deleted = TRUE, deleted_at = NOW(), updated_at = NOW() WHERE id = $1 RETURNING *`,
             [id]
         );
+        if (result.rows.length === 0) throw Object.assign(new Error("User not found"), { statusCode: 404 });
         return result.rows[0];
     } catch (error) {
         throw error;

@@ -46,7 +46,7 @@ const getDashboard = async () => {
         currentBalance,
     };
 
-    // ── 4. Category Analytics ────────────────────────────────────────────────
+
     const expenseCategories = categoryRows.filter(r => r.type === "expense");
     const incomeCategories  = categoryRows.filter(r => r.type === "income");
 
@@ -78,7 +78,6 @@ const getDashboard = async () => {
         topSpendingCategories,
     };
 
-    // ── 5. Time-based Trends ─────────────────────────────────────────────────
     // Build maps: month → { income, expense }
     const monthMap = {};
     // month_start is a Date object from DATE_TRUNC — convert to 'YYYY-MM' string as map key
@@ -114,16 +113,16 @@ const getDashboard = async () => {
 
     const timeTrends = { monthlyIncome, monthlyExpense, monthlyNetCashFlow, weeklyTrends };
 
-    // ── 6. Burn Rate & Runway ────────────────────────────────────────────────
+    //Burn Rate & Runway 
     const totalMonths = allMonths.length || 1;
     const burnRate    = parseFloat((totalExpenses / totalMonths).toFixed(2));
     const runwayMonths = burnRate > 0
         ? parseFloat((currentBalance / burnRate).toFixed(2))
-        : null; // null means infinite runway (no expenses)
+        : null; 
 
     const burnAndRunway = { burnRate, runwayMonths };
 
-    // ── 7. Financial Health Metrics ──────────────────────────────────────────
+    // Financial Health Metrics 
     const savingsRate  = totalIncome > 0
         ? parseFloat(((totalIncome - totalExpenses) / totalIncome).toFixed(4))
         : 0;
@@ -144,12 +143,12 @@ const getDashboard = async () => {
 
     const healthMetrics = { savingsRate, expenseRatio, deficitMonths, cashFlowStatus };
 
-    // ── 8. Behavioral Insights (simple — no volatility/recurring) ───────────
+
     const behavioralInsights = {
         mostFrequentCategory, // { category, count } from DB
     };
 
-    // ── 9. Alerts ────────────────────────────────────────────────────────────
+    // Alerts 
     const currentMonthKey = new Date().toISOString().slice(0, 7); // "YYYY-MM"
     const lastMonthDate   = new Date();
     lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
@@ -181,34 +180,7 @@ const getDashboard = async () => {
         topExpense: topTransaction,
     };
 
-    // ── 10. Health Score (composite) ─────────────────────────────────────────
-    // savingsRate:    40 pts  (>30% → full, scales linearly)
-    // expenseRatio:   30 pts  (<70%  → full, scales linearly)
-    // deficitMonths:  30 pts  (0 deficit → full, -5 per deficit month)
-    const savingsScore  = Math.min(40, Math.max(0, (savingsRate / 0.3) * 40));
-    const expenseScore  = expenseRatio !== null
-        ? Math.min(30, Math.max(0, ((1 - expenseRatio) / 0.3) * 30))
-        : 30;
-    const deficitScore  = Math.max(0, 30 - deficitMonths.length * 5);
-    const rawScore      = savingsScore + expenseScore + deficitScore;
-    const healthScore   = Math.round(rawScore);
-
-    const healthStatus =
-        healthScore >= 80 ? "Excellent" :
-        healthScore >= 60 ? "Good"      :
-        healthScore >= 40 ? "Fair"      : "Poor";
-
-    const healthScoreResult = {
-        score: healthScore,
-        status: healthStatus,
-        breakdown: {
-            savingsRateScore:  Math.round(savingsScore),
-            expenseRatioScore: Math.round(expenseScore),
-            deficitMonthScore: Math.round(deficitScore),
-        },
-    };
-
-    // ── 11. Assemble & cache ─────────────────────────────────────────────────
+    // Assemble & cache 
     const dashboard = {
         financialSummary,
         categoryAnalytics,
@@ -217,7 +189,6 @@ const getDashboard = async () => {
         healthMetrics,
         behavioralInsights,
         alerts,
-        healthScore: healthScoreResult,
         meta: {
             cachedAt: new Date().toISOString(),
             source: "db",

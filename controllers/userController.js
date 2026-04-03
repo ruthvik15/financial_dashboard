@@ -15,7 +15,10 @@ const signup = async (req, res) => {
         });
         res.json({user});
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.code === '23505') {
+            return res.status(409).json({ message: "Email already exists" });
+        }
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
@@ -34,7 +37,7 @@ const login = async (req, res) => {
         });
         res.json({user});
     } catch (error) {
-        res.status(401).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 

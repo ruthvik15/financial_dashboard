@@ -7,7 +7,7 @@ const getUsers = async (req, res) => {
         const users = await adminService.getUsers(page,limit);
         res.status(200).json({data:users,page,limit});
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
@@ -21,7 +21,7 @@ const updateRole = async (req, res) => {
         const user = await adminService.updateRole(id,role);
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
@@ -34,7 +34,7 @@ const deActivateUser = async (req, res) => {
         const user = await adminService.deActivateUser(id);
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
@@ -47,7 +47,7 @@ const deleteUser = async (req, res) => {
         const user = await adminService.deleteUser(id);
         res.status(204).send();
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
@@ -55,10 +55,15 @@ const getRecords = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const records = await adminService.getRecords(page,limit);
+        const filters = {
+            date: req.query.date,
+            category: req.query.category,
+            type: req.query.type,
+        };
+        const records = await adminService.getRecords(page,limit, filters);
         res.status(200).json(records);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
@@ -71,7 +76,7 @@ const addRecord = async (req, res) => {
         const record = await adminService.addRecord(amount,type,category,date,notes);
         res.status(201).json(record);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
@@ -85,7 +90,7 @@ const updateRecord = async (req, res) => {
         const record = await adminService.updateRecord(id, amount, type, category, date, notes);
         res.status(200).json(record);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
@@ -98,7 +103,7 @@ const deleteRecord = async (req, res) => {
         const record = await adminService.deleteRecord(id);
         res.status(204).send();
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
     }
 };
 

@@ -10,3 +10,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_users_role ON users(role);
+CREATE INDEX idx_users_active_deleted ON users(is_active, is_deleted);
