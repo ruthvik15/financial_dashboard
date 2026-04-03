@@ -132,14 +132,6 @@ The `Viewer` dashboard defaults its heavy financial calculations to `Redis`. Any
 
 
   ### env structure 
-  JWT_SECRET="1FJX#21*$#*$@foewqdfvfv"
-REDIS_HOST=redis-15929.c326.us-east-1-3.ec2.cloud.redislabs.com:15929
-REDIS_PORT=15929
-REDIS_USERNAME=default
-REDIS_PASSWORD=hn2pWNlzqFhhw01kOEEgOtNsYpYQrRsK
-
-REDIS_URL="redis://default:hn2pWNlzqFhhw01kOEEgOtNsYpYQrRsK@redis-15929.c326.us-east-1-3.ec2.cloud.redislabs.com:15929"
-
 ```
 JWT_SECRET="1FJX#21*$#*$@foewqdfvfv"
 REDIS_URL="redis://default:xxxxxxx@redis-15929.c326.us-east-1-3.ec2.cloud.redislabs.com:15929"
