@@ -29,6 +29,9 @@ flowchart LR
     E --> G
 ```
 
+<img width="1171" height="371" alt="ADV_FINANCIAL drawio (1)" src="https://github.com/user-attachments/assets/960e8dd5-cbfe-4151-abf5-e649dfd799b2" />
+https://drive.google.com/file/d/1AVBpWPHu0Y4vOp6LMaQEt9R90ZBNMDc6/view?usp=drive_link
+
 ### Low-Level Design (LLD): RBAC Middleware Flow
 Traffic is explicitly guarded and shaped via JWT token inspection. Routing behaves uniquely depending on session claims.
 
