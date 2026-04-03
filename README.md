@@ -1,10 +1,10 @@
-# Financial Dashboard API 📊
+# Financial Dashboard API 
 
 A robust, enterprise-ready backend API serving financial dashboard records, managing users, computing analytics, and securely separating data access through strict Role-Based Access Control (RBAC).
 
 ---
 
-## 🏗 System Architecture
+##  System Architecture
 
 ### High-Level Design (HLD): Cloud Scaling Readiness
 To support enterprise/B2B usage where we may serve high volumes of requests and process heavy analytical aggregations, the system splits application layers (compute) from persistent layers (storage). Using a Load Balancer ensures scaling horizontally remains seamless.
@@ -53,7 +53,7 @@ flowchart LR
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 - **Node.js + Express**: Core event-driven HTTP processing.
 - **PostgreSQL**: Relational precision dataset mapping.
 - **Redis (ioredis)**: In-memory structured caching for Dashboard Analytics.
@@ -62,7 +62,7 @@ flowchart LR
 
 ---
 
-## 🛠 Design Decisions & Assumptions
+## Design Decisions & Assumptions
 
 ### 1. B2B Multi-Tenant Scalability & Tradeoffs
 If this backend pivots to serving multiple businesses (B2B multi-tenancy), the architecture explicitly relies on Load Balancers directing traffic to transient Node.js nodes. 
