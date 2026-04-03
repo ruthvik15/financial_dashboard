@@ -51,6 +51,19 @@ flowchart LR
     F -- CUSTOM READ --> D
 ```
 
+### Design Patterns & Security
+- **Controller-Service-Repository Pattern**: The application architecture strictly isolates domains to prevent bleeding:
+  - *Controllers* manage HTTP network parsing, URL evaluations, and error tracking formatting securely.
+  - *Services* evaluate isolated business/domain logic parameters natively (like verifying unHashed tokens).
+  - *Repositories* manage explicitly mapped `pg` (PostgreSQL) strings avoiding blind SQL injections via static Data Access scaling!
+- **RBAC (Role-Based Access Control)**: Route mapping is governed exclusively by `auth.js` middleware interceptors via JSON Web Tokens. Claims limit capabilities implicitly bounds:
+  - **Admin**: Contains destructive CRUD capabilities.
+  - **Analyst**: Designed with sandboxed query testing and customized logic filters.
+  - **Viewer**: Standard cache-optimized read-only capabilities focused strictly around dashboard retrieval.
+
+### Testing Validation
+- Functional assurance algorithms and API regressions are managed completely via **Jest**. Native route validation blocks leverage **Supertest** executing local token modeling workflows independent of physical browser checks mapping expected behaviors securely (`npm test`).
+
 ---
 
 ## Tech Stack
@@ -83,3 +96,36 @@ Calculations from PostgreSQL's `NUMERIC` types natively output as generic text s
 
 ### 5. Caching Volatility
 The `Viewer` dashboard defaults its heavy financial calculations to `Redis`. Any mutations triggered by `Admin` roles (Add, Update, Delete) automatically dispatch cache invalidation signals (`invalidateCache`) for the overarching `DASHBOARD_KEY` to ensure total consistency instantly without requiring a TTl-timeout (Time To Live).
+
+---
+
+## API Reference & Endpoints
+
+### Documentation
+- `GET /api-docs` : Auto-generated Interactive Swagger OpenAPI UI Explorer.
+
+### Authentication
+- `POST /signup` : Register a new platform user identity.
+- `POST /login` : Generate an authorization JSON Web Token via authentication matching.
+
+### Admin Tools (*Admin*)
+- `GET /admin/users` : List all platform users and roles.
+- `PUT /admin/user/:id/role` : Elevate or modify active user capabilities.
+- `PUT /admin/user/:id/deactivate` : Soft-lock standard accounts.
+- `DELETE /admin/user/:id` : Soft-delete user registries.
+- `GET /admin/records` : Read and dynamically filter all global accounting logs natively!
+- `POST /admin/record` : Seed fresh financial log models dynamically.
+- `PUT /admin/record/:id` : Retroactively repair ledger metadata dynamically.
+- `DELETE /admin/record/:id` : Soft-delete financial records gracefully.
+
+### Analyst Data Options (*Admin*, *Analyst*)
+- `POST /analyst/query` : Custom raw dynamic JSON syntax parsing logic.
+
+### Visualization Maps (*Admin*, *Analyst*, *Viewer*)
+- `GET /dashboard` : Core Redis-backed aggregate snapshot payload parsing. The returned financial matrix includes:
+  - **Financial Summary**: Raw aggregations of Total Income, Expenses, and Net/Current Balances.
+  - **Category Analytics**: Spending breakdowns sorted by percentages and identifying the Top 3 spending categories.
+  - **Time Trends**: Month-over-Month and Week-by-Week array mappings of income vs expense trajectories.
+  - **Burn & Runway Metrics**: Computes average monthly burn rates and estimates total runway lifespans based on liquid cash flow.
+  - **Health Metrics**: Assesses savings rates, expense ratios, and historical cash-flow statuses.
+  - **Alerts & Insights**: Flags immediate overspend metrics against adjacent months and highlights behavioral frequencies (most active category/largest single expense).
