@@ -131,18 +131,42 @@ The `Viewer` dashboard defaults its heavy financial calculations to `Redis`. Any
   - **Alerts & Insights**: Flags immediate overspend metrics against adjacent months and highlights behavioral frequencies (most active category/largest single expense).
 
 
-  ### env structure 
-```
-JWT_SECRET="1FJX#21*$#*$@foewqdfvfv"
-REDIS_URL="redis://default:xxxxxxx@redis-15929.c326.us-east-1-3.ec2.cloud.redislabs.com:15929"
+---
 
-DB_USER="postgres"
-DB_HOST="localhost"
-DB_NAME="postgres"
-DB_PASSWORD="xxxx"
-DB_PORT=5432
-PORT=3000
+## ⚙️ Local Setup Instructions
+
+### 1. Prerequisites
+- **Node.js** (v16.0+ recommended)
+- **Git**
+
+### 2. Environment Configurations
+Clone the repository and install packages:
+```bash
+git clone https://github.com/ruthvik15/financial_dashboard.git
+cd financial_dashboard
+npm install
 ```
-1.Run 
-```npm install  ```
-``` npm run dev```
+
+Create a `.env` file at the root repository mapping the expected connection variables:
+```env
+# Application Variables
+PORT=3000
+JWT_SECRET="1FJX#21*$#*$@foewqdfvfv"
+
+# Cloud Connections
+REDIS_URL="redis://default:xxxxxx@redis-15929.c326.us-east-1-3.ec2.cloud.redislabs.com:15929"
+POSTGRES_DB_URI="postgresql://postgres.xxx:xxx@aws-1-ap-south-1.pooler.supabase.com:5432/postgres"
+```
+
+### 3. Application Execution
+You can easily spin up the server environment using built-in testing boundaries or native NPM tools:
+
+```bash
+# Verify integrity via Jest/Supertest isolated environment
+npm test
+
+# Standard Bootup (Hotkeys into nodemon app.js)
+npm run dev
+```
+
+Navigate to `http://localhost:3000/api-docs` to access the interactive Swagger Documentation.
